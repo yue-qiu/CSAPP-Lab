@@ -288,7 +288,11 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4 
  */
 int logicalNeg(int x) {
-  return 2;
+  /*
+   * 如果 x 为非零，其相反数与本身按位或一定得到一个负数，右移 31 位得到 -1
+   * 如果 x 为零，其相反数与本身按位或一定为 0，右移 31 位还是 0
+   */
+  return ((x | (~x+1)) >> 31) + 1;
 }
 /* howManyBits - return the minimum number of bits required to represent x in
  *             two's complement
