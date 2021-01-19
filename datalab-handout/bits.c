@@ -166,10 +166,26 @@ int tmin(void) {
  *   Rating: 1
  */
 int isTmax(int x) {
-  // Tmax+1 再取反等于其本身，如果 ~(x+1) 异或 x 为 0 说明 x 是 Tmax
-  // -1 是特例，需要利用 !!(x+1) 额外判断 
-  // return !!((x+1) & (0x80 << 16)); illegal operator <<
-  return !(~(x + 1) ^ x) & !!(x+1);
+  /* 
+   * 解法 1：
+   * 这种 true or false 的函数，就是要把输入化为某种 bool 值。
+   * C 语言里零为 false，非零为 true 
+   * 如果 Tmax 满足某种运算变成 0，而 x 也满足这种运算，我们就说 x is Tmax
+   * ~((Tmax+1)+Tmax) == 0，要排除 -1(0xFFFF) 的例外
+   */
+  int a = x + 1;
+  int b = a + x;
+  int c = ~b;
+  return !(c) & !!(a^0);
+
+
+  /* 
+   * 解法 2：
+   * Tmax+1 再取反等于其本身，如果 x 满足这个性质说明 x 是 Tmax
+   * -1 是特例，需要利用 !!(x+1) 额外判断 
+   *  return !(~(x + 1) ^ x) & !!(x+1);
+   *  如果能用 << ，还可以用 &0x8000 判断 x+1 符号位 return !!((x+1) & (0x80 << 16));
+   */
 }
 /* 
  * allOddBits - return 1 if all odd-numbered bits in word set to 1
@@ -180,8 +196,10 @@ int isTmax(int x) {
  *   Rating: 2
  */
 int allOddBits(int x) {
-  // 一个奇数位全 1 的数 & 0xAAAAAAAA 结果为 0xAAAAAAAA
-  // 代码中最大只能用 0xAA，需要用一些二进制技巧把 0xAAAAAAAA 构造出来
+  /*
+   * 一个奇数位全 1 的数 & 0xAAAAAAAA 结果为 0xAAAAAAAA
+   * 代码中最大只能用 0xAA，需要用一些二进制技巧把 0xAAAAAAAA 构造出来
+   */
   int a = 0xAA << 8; // 0xAA00
   int b = a | 0xAA; // 0xAAAA
   int c = b << 16 | b; // 0xAAAAAAAA 
@@ -195,9 +213,11 @@ int allOddBits(int x) {
  *   Rating: 2
  */
 int negate(int x) {
-  // x + ~x = -1 且 x + negate(x) = 0
-  // 可得 negate(x) = ~x + 1
-  return ~x + 1;
+  /*
+   * x + ~x = -1 且 x + negate(x) = 0
+   * 可得 negate(x) = ~x + 1
+   */
+   return ~x + 1;
 }
 //3
 /* 
@@ -210,13 +230,15 @@ int negate(int x) {
  *   Rating: 3
  */
 int isAsciiDigit(int x) {
-  // 0x30 = 0011 0000, 0x39 = 0011 1001
-  // 所有 AsciiDigit 都要满足前 4 位等于 0x3
-  // 后四位范围是 0-9，与 -0xA 之和应为负数
-  // 与 0x8000 做 & 判断正负。大于等于 0 的数 & 0x8000 为 0，负数 & 0x8000 为正
-  // !! 把数字强转为 bool。零转为 0，非零转为 1
+  /*
+   * 0x30 = 0011 0000, 0x39 = 0011 1001
+   * 所有 AsciiDigit 都要满足前 4 位等于 0x3
+   * 后四位范围是 0-9，与 -0xA 之和应为负数
+   * 与 0x8000 做 & 判断正负。大于等于 0 的数 & 0x8000 为 0，负数 & 0x8000 为正
+   * !! 把数字强转为 bool。零转为 0，非零转为 1
+   */
   int a = !((x >> 4) ^ 0x3);
-  int b = x & 0xf;
+  int b = x & 0xf; // 取 x 的后 4 位
   int c = b + (~0xA + 1);
   int d = !!(c & (0x80 << 4));
   return a & d;
@@ -229,7 +251,15 @@ int isAsciiDigit(int x) {
  *   Rating: 3
  */
 int conditional(int x, int y, int z) {
-  return 2;
+  /*
+   * 根据 x 的布尔值转换为全 0 或全 1
+   */
+  x = !!(x); // 获得 x 的布尔值
+  x = ~x + 1; // 获得 0x0 或 0xffff。negative(0) = 0，negative(1) = 0xffff
+  //return (x&y) | (~x&z);
+  int y1 = (~y+1)&~x; // x 非零，y1 为 0；x 为零，y1 为 -y
+  int z1 = (~z+1)&x;  // x 非零，z1 为 -z；x 为零，z1 为 0
+  return y + y1 + z + z1;
 }
 /* 
  * isLessOrEqual - if x <= y  then return 1, else return 0 
