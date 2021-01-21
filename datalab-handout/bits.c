@@ -254,12 +254,12 @@ int conditional(int x, int y, int z) {
   /*
    * 根据 x 的布尔值转换为全 0 或全 1
    */
-  int x_to_bool = !!(x); // 获得 x 的布尔值
-  int mask = ~x_to_bool + 1; // 获得 0x0 或 0xffff。negative(0) = 0，negative(1) = 0xffff
-  int y1 = (~y+1)&~mask; // x 非零，y1 为 0；x 为零，y1 为 -y
-  int z1 = (~z+1)&mask;  // x 非零，z1 为 -z；x 为零，z1 为 0
-  return y + y1 + z + z1;
-  //return (x&y) | (~x&z);
+  x = !!(x); // 获得 x 的布尔值
+  int mask = ~x + 1; // 获得 0x0 或 0xffff。negative(0) = 0，negative(1) = 0xffff
+  //int y1 = (~y+1)&~mask; // x 非零，y1 为 0；x 为零，y1 为 -y
+  //int z1 = (~z+1)&mask;  // x 非零，z1 为 -z；x 为零，z1 为 0
+  //return y + y1 + z + z1;
+  return (mask&y) | (~mask&z);
 }
 /* 
  * isLessOrEqual - if x <= y  then return 1, else return 0 
@@ -269,12 +269,17 @@ int conditional(int x, int y, int z) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-  int s = 1 << 31;
-  int x_is_neg = !!(x & s);
-  int y_is_not_neg = !(y & s);
+  /*
+   * 三种情况 x <= y：
+   * 1. x 为负，y 非负
+   * 2. x，y 为负且 y - x > 0
+   * 3. x, y 非负且 y - x > 0
+   * */
+  int x_is_neg = !!(x >> 31);
+  int y_is_not_neg = !(y >> 31);
   int minus_x = ~x+1;
   int sub = y + minus_x;
-  int sub_is_not_neg = !(sub & s);
+  int sub_is_not_neg = !(sub >> 31);
 
   return  (x_is_neg & y_is_not_neg) | (!x_is_neg & y_is_not_neg & sub_is_not_neg) | (x_is_neg & !y_is_not_neg & sub_is_not_neg);
 }
