@@ -254,8 +254,8 @@ int conditional(int x, int y, int z) {
   /*
    * 根据 x 的布尔值转换为全 0 或全 1
    */
-  x = !!(x); // 获得 x 的布尔值
-  int mask = ~x + 1; // 获得 0x0 或 0xffff。negative(0) = 0，negative(1) = 0xffff
+  int x_to_bool = !!(x); // 获得 x 的布尔值
+  int mask = ~x_to_bool + 1; // 获得 0x0 或 0xffff。negative(0) = 0，negative(1) = 0xffff
   //int y1 = (~y+1)&~mask; // x 非零，y1 为 0；x 为零，y1 为 -y
   //int z1 = (~z+1)&mask;  // x 非零，z1 为 -z；x 为零，z1 为 0
   //return y + y1 + z + z1;
@@ -351,7 +351,17 @@ int howManyBits(int x) {
  *   Rating: 4
  */
 unsigned floatScale2(unsigned uf) {
-  return 2;
+  unsigned sign = uf >> 31;
+  unsigned exponent = ((uf & 0x7f800000) >> 23);
+  unsigned significand = 0x7fffff & uf;
+  // NaN and Infinity
+  if (exponent == 0xff) return uf;
+  // unnomarlized
+  if (exponent == 0) {
+  	return (sign << 31) + (significand << 1);
+  }
+
+  return (sign << 31) + ((exponent + 1) << 23) + significand;
 }
 /* 
  * floatFloat2Int - Return bit-level equivalent of expression (int) f
@@ -366,7 +376,24 @@ unsigned floatScale2(unsigned uf) {
  *   Rating: 4
  */
 int floatFloat2Int(unsigned uf) {
-  return 2;
+  unsigned exponent = ((uf & 0x7f800000) >> 23);
+  unsigned significand = 0x7fffff & uf;
+  unsigned bias = 1;
+  int E = exponent - ((1 << 7) - 1);
+  int mask = ~(uf >> 31) + 1;
+  if (exponent == 0xff) return 0x80000000u;
+  if (exponent == 0 || E < 0) return 0;
+  while (E > 0) {
+	bias = (bias << 1) | !!(significand & 0x400000);
+	significand = significand << 1;
+	bias = bias << 1;
+	--E;
+  }
+  // 处理溢出
+  if (bias == 0) {
+  	return 0x80000000u;
+  }
+  return ((mask & -1) | (~mask & 1)) * bias; 
 }
 /* 
  * floatPower2 - Return bit-level equivalent of the expression 2.0^x
@@ -382,5 +409,13 @@ int floatFloat2Int(unsigned uf) {
  *   Rating: 4
  */
 unsigned floatPower2(int x) {
-    return 2;
+    /*
+     * 2.0 = 1.0 * 2.0^1，同理 2.0^x = 1.0 * 2.0^x
+     * 也就是说 2.0^x 与 2.0 有相同的符号位（皆为 0）、尾数位（皆为 1.0-1），唯一的区别在于指数位
+     * 在 2.0 中，指数位为 1+127；在 2.0^x 中，指数位为 x+127
+     * */
+    int exponent = x + 127; // 127 是 float 的指数 bias，E = exponent - 127
+    if (exponent >= 255) return 0xff << 23; // 指数位越过上界，返回正无穷
+    if (exponent <= 0) return 0; // 指数位越过下界，返回 0
+    return exponent << 23;
 }
