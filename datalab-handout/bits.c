@@ -202,8 +202,8 @@ int allOddBits(int x) {
    */
   int a = 0xAA << 8; // 0xAA00
   int b = a | 0xAA; // 0xAAAA
-  int c = b << 16 | b; // 0xAAAAAAAA 
-  return !((x & c) ^ (c));
+  int mask = b << 16 | b; // 0xAAAAAAAA 
+  return !((x & mask) ^ (mask));
 }
 /* 
  * negate - return -x 
@@ -234,14 +234,12 @@ int isAsciiDigit(int x) {
    * 0x30 = 0011 0000, 0x39 = 0011 1001
    * 所有 AsciiDigit 都要满足前 4 位等于 0x3
    * 后四位范围是 0-9，与 -0xA 之和应为负数
-   * 与 0x8000 做 & 判断正负。大于等于 0 的数 & 0x8000 为 0，负数 & 0x8000 为正
-   * !! 把数字强转为 bool。零转为 0，非零转为 1
    */
   int a = !((x >> 4) ^ 0x3);
   int b = x & 0xf; // 取 x 的后 4 位
-  int c = b + (~0xA + 1);
-  int d = !!(c & (0x80 << 4));
-  return a & d;
+  int sum = b + (~0xA + 1);
+  int is_neg = !!(sum & (1 << 4)); // 判断 c 是否为负
+  return a & is_neg;
 }
 /* 
  * conditional - same as x ? y : z 
