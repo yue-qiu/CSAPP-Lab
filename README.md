@@ -4,6 +4,7 @@ CSAPP 作为一本公认的神书，其优秀程度毋庸多言。本人在大�
 
 - [datalab(100%)](#datalab)
 - [bomblab(%100)](#bomblab)
+- [attacklab(0%)](#attacklab)
 
 ### datalab
 
@@ -20,3 +21,7 @@ bomblab 可谓是“举世闻名”了，无数大佬谈起它都赞不绝口。
 下面放出成功拆除炸弹的截图，那一瞬间还是很有成就感的：
 
 ![bomblab](https://i.loli.net/2021/01/26/xOFLfN7YQbwhE4p.png)
+
+### attacklab
+
+本实验对应书本第三章：程序的机器级表示中，缓冲区溢出攻击的内容。目标是通过代码注入攻击（Code Injection Attack）和返回导向编程（Return Oriented Programming）两种攻击方式，分别修改具有缓冲区溢出漏洞的两个x86_64可执行文件的行为。主要目的是加深学生对于栈规则的理解，以及说明缓冲区溢出可能造成的后果。
