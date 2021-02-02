@@ -1,6 +1,6 @@
 ## attacklab
 
-实验分为 5 个 phases。详细说明见 CMU 提供的[文档](http://csapp.cs.cmu.edu/3e/attacklab.pdf)。前三个实验基于 `ctarget` 程序，后两个基于 `rtarget` 程序。
+实验分为 5 个 phases，详细说明见 CMU 提供的[文档](http://csapp.cs.cmu.edu/3e/attacklab.pdf)。前三个实验基于 `ctarget` 程序，后两个基于 `rtarget` 程序。
 
 前三个实验基于同一个函数展开：
 
@@ -14,7 +14,7 @@ void test() {
 
 `ctarget` 程序每次通过 `test()` 调用 `getbuf()`，从 shell 读入一行字符串并**不加检测地**保存到 `getbuf()` 的栈帧上，这意味可能会发生缓冲区溢出，攻击者可以通过构造合适的输入使保存在栈中的 `test()` 返回地址被覆盖，最后的表现就是 `getbuf()` 结束后程序崩溃或跳到别处而不是回到 `test()` 继续执行。在前三个 phases 中，我们的任务就是通过构造合适的输入分别使程序在 `getbuf()` 结束后转去执行 `touch1()`、`touch2()` 和 `touch3()`。
 
-```
+```C
 void touch1() {
     vlevel = 1; /* Part of validation protocol */
     printf("Touch1!: You called touch1()\n");
