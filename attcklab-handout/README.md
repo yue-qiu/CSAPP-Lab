@@ -1,6 +1,6 @@
 ## attacklab
 
-实验分为 5 个 phases，详细说明见 CMU 提供的[文档](http://csapp.cs.cmu.edu/3e/attacklab.pdf)。前三个实验基于 `ctarget` 程序，后两个基于 `rtarget` 程序。
+实验分为 5 个 phases，详细说明见 CMU 提供的[文档](http://csapp.cs.cmu.edu/3e/attacklab.pdf)。前三个实验基于 `ctarget` 程序，后两个基于 `rtarget` 程序。`hex2raw` 是用来进行十六进制向二进制串转换的工具，如地址高位为 0x80 时，ASCII 对应的字符是不可通过键盘输入的，可使用 hex2raw 进行转换。hex2raw 读取输入文件中的十六进制串(每两个十六进制数用空格隔开)，将其转换为对应的二进制序列。
 
 前三个实验基于同一个函数展开：
 
@@ -66,5 +66,13 @@ void touch3(char *sval) {
 
 ```bash
 ./hex2raw < phase1.txt | ./ctarget -q
+```
+
+### phase2
+
+执行如下命令过关：
+
+```bash
+./hex2raw < phase2.txt | ./ctarget -q
 ```
 
