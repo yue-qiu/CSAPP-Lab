@@ -70,9 +70,16 @@ void touch3(char *sval) {
 
 ### phase2
 
-执行如下命令过关：
+需要注入的指令保存在 `phase2.d` 中，执行如下命令过关：
 
 ```bash
 ./hex2raw < phase2.txt | ./ctarget -q
 ```
 
+### phase3
+
+需要注入的指令保存在 `phase3.d` 中，执行如下命令过关：
+
+```bash
+./hex2raw < phase3.txt | ./ctarget -q
+```
