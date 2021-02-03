@@ -4,7 +4,7 @@ CSAPP 作为一本公认的神书，其优秀程度毋庸多言。本人在大�
 
 - [datalab(100%)](#datalab)
 - [bomblab(%100)](#bomblab)
-- [attacklab(40%)](#attacklab)
+- [attacklab(60%)](#attacklab)
 
 ### datalab
 
