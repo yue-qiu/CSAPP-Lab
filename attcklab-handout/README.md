@@ -102,3 +102,20 @@ void touch3(char *sval) {
 ```bash
 ./hex2raw < phase3.txt | ./ctarget -q
 ```
+
+### phase4
+
+phase4 基于是 `rtarget` 程序，使用了栈随机化和内存标记位技术，使我们无法像以前那样往栈里注入自己编写的代码并执行。这就用到 Return-Oriented Program(ROP) 技术了。我们从程序单条指令中截取一部分，称为 `gadget`，使其被 CPU 解释为另一种指令来完成攻击，这些 `gadget` 往往由 `ret` 指令结尾，因为我们需要 `ret` 来完成程序控制权的转移。
+
+我们在栈顶注入一系列 gadget 的地址，`ret` 指令保证了各个 gadget 组成了一个 chain，每次执行 `ret` 就是跳转到另一个 `gedget` 里继续我们的攻击。
+
+执行如下命令过关：
+
+```bash
+./hex2raw < phase4.txt | ./rtarget -q
+```
+
+### phase5
+
+实验做到这里就能拿 95 分了，剩下这个算是选做题。因为这部分内容对实际工作用处不是很大，暂时就跳过了。
+
