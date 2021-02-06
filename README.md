@@ -5,7 +5,7 @@ CSAPP 作为一本公认的神书，其优秀程度毋庸多言。本人在大�
 - [datalab(100%)](#datalab)
 - [bomblab(%100)](#bomblab)
 - [attacklab(100%)](#attacklab)
-- [cachelab(50%)](#cachelab)
+- [cachelab(100%)](#cachelab)
 
 ### datalab
 
@@ -30,4 +30,8 @@ bomblab 可谓是“举世闻名”了，无数大佬谈起它都赞不绝口。
 ### cachelab
 
 本实验让学生模拟实现一个全相联缓存模型与优化矩阵转置缓存不命中率，加深学生对缓存替换过程的理解，锻炼编写高性能代码的能力。 
+
+这个实验 partB 没拿到满分，个人认为掌握“化整为零”的思想，懂得把大数据分割成多个小数据，提高程序的空间局部性以尽量利用高速缓存的思想就可以了，所以没有做更细致的优化：
+
+![cachelab](https://i.loli.net/2021/02/06/nd5MINRpwUx4YoQ.png)
 
