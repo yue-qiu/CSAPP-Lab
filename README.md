@@ -3,7 +3,7 @@
 CSAPP 作为一本公认的神书，其优秀程度毋庸多言。本人在大学期间断断续续读过两三遍，但每次都是浅尝辄止，只挑了其中一些章节来看。荣升大四狗之后有了不少自由时间，于是打算系统性地刷一遍此书，并至少完成几个个人比较感兴趣的 Lab。目前进度：
 
 - [data lab(100%)](#DataLabb)
-- [bomb lab(%100)](#BombLab)
+- [bomb lab(100%)](#BombLab)
 - [attack lab(100%)](#AttackLa)
 - [cache lab(100%)](#CacheLab)
 - [shell lab(100%)](#ShellLab)
@@ -40,6 +40,6 @@ bomblab 可谓是“举世闻名”了，无数大佬谈起它都赞不绝口。
 
 做这个实验之前一定要**完整看完**书本的第八章，不然会一头雾水不知从何下手。实验完成后我们可以得到自己的 shell 程序 `tsh`，它实现了一个 shell 程序该有的基本功能：加载并执行程序、作业管理及退出。
 
-截图简单示范了下 `tsh` 是如何工作的：
+截图简单示范 `tsh` 是如何工作的：
 
 ![image.png](https://i.loli.net/2021/03/09/OMefCBVgyqLwZHx.png)
